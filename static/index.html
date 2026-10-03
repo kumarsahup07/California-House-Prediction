@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HousePrice AI | Premium House Valuation</title>
+  <meta name="description" content="Predict California house prices using an advanced machine learning model. Accurate, instant real estate valuation.">
+  
+  <!-- Modern Clean Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Background Architecture Imagery Layer -->
+  <div class="bg-layer" aria-hidden="true"></div>
+  <div class="bg-overlay" aria-hidden="true"></div>
+
+  <!-- Minimal Transparent Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span class="brand-title">HousePrice<span>AI</span></span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#prediction" class="nav-link">Prediction</a>
+        <div id="status-indicator" class="api-status" title="Checking backend connection...">
+          <span class="status-dot"></span> Checking
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="container">
+      
+      <!-- Compact Hero Section -->
+      <section id="home" class="hero-section">
+        <span class="badge-tag">California Housing Valuation</span>
+        <h1 class="hero-title">Predict Your House Price</h1>
+        <p class="hero-subtitle">Enter the property details and get an estimated house price instantly.</p>
+      </section>
+
+      <!-- Prediction Card -->
+      <section id="prediction" class="prediction-card">
+        
+        <div class="form-header-bar">
+          <h2 class="form-header-title">Property Specifications</h2>
+          <button type="button" id="btn-fill-sample" class="btn-ghost-sm" title="Populate realistic test data from the backend example">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Fill Sample Property
+          </button>
+        </div>
+
+        <!-- Quick Region Selector helper -->
+        <div class="quick-preset-banner">
+          <div class="preset-info">
+            <span class="preset-title">California Region Quick-Pick</span>
+            <span class="preset-desc">Quickly set latitude and longitude to a known California metropolitan area.</span>
+          </div>
+          <select id="preset-region" class="preset-select" aria-label="California Region Preset">
+            <option value="sf_bay">San Francisco Bay / Berkeley</option>
+            <option value="silicon_valley">Silicon Valley / Mountain View</option>
+            <option value="los_angeles">Los Angeles Metropolitan</option>
+            <option value="san_diego">San Diego Coastal</option>
+            <option value="sacramento">Sacramento Valley</option>
+          </select>
+        </div>
+
+        <!-- Error Alert Container -->
+        <div id="error-alert" class="error-alert" role="alert">
+          <div class="error-alert-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <span id="error-message">Validation Error</span>
+          </div>
+          <ul id="error-list" class="error-list"></ul>
+        </div>
+
+        <!-- Prediction Form -->
+        <form id="prediction-form" novalidate>
+          
+          <div class="form-grid">
+            
+            <!-- Average Rooms -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="AveRooms">Average Rooms</label>
+                <span class="label-hint">1.0 – 15.0</span>
+              </div>
+              <div class="input-wrapper">
+                <input type="number" id="AveRooms" name="AveRooms" step="0.01" min="1.0" max="15.0" placeholder="e.g. 5.82" value="5.818" required>
+              </div>
+              <div id="err-AveRooms" class="field-error-msg"></div>
+            </div>
+
+            <!-- Average Bedrooms -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="AveBedrms">Average Bedrooms</label>
+                <span class="label-hint">0.5 – 4.0</span>
+              </div>
+              <div class="input-wrapper">
+                <input type="number" id="AveBedrms" name="AveBedrms" step="0.01" min="0.5" max="4.0" placeholder="e.g. 1.04" value="1.038" required>
+              </div>
+              <div id="err-AveBedrms" class="field-error-msg"></div>
+            </div>
+
+            <!-- House Age -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="HouseAge">Property Age (Years)</label>
+                <span class="label-hint">1 – 52 yrs</span>
+              </div>
+              <div class="input-wrapper">
+                <input type="number" id="HouseAge" name="HouseAge" step="1" min="1" max="52" placeholder="e.g. 41" value="41" required>
+              </div>
+              <div id="err-HouseAge" class="field-error-msg"></div>
+            </div>
+
+            <!-- Average Occupants -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="AveOccup">Average Occupants</label>
+                <span class="label-hint">1.0 – 15.0</span>
+              </div>
+              <div class="input-wrapper">
+                <input type="number" id="AveOccup" name="AveOccup" step="0.1" min="1.0" max="15.0" placeholder="e.g. 2.6" value="2.6" required>
+              </div>
+              <div id="err-AveOccup" class="field-error-msg"></div>
+            </div>
+
+            <!-- Median Income -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="MedInc">Median Area Income ($10k)</label>
+                <span id="income-hint" class="label-hint">≈ $40,583 / yr</span>
+              </div>
+              <div class="input-wrapper">
+                <input type="number" id="MedInc" name="MedInc" step="0.01" min="0.5" max="15.0" placeholder="e.g. 4.0583" value="4.0583" required>
+              </div>
+              <div id="err-MedInc" class="field-error-msg"></div>
+            </div>
+
+            <!-- Block Population -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="Population">Block Population</label>
+                <span class="label-hint">100 – 35,000</span>
+              </div>
+              <div class="input-wrapper">
+                <input type="number" id="Population" name="Population" step="1" min="100" max="35000" placeholder="e.g. 1127" value="1127" required>
+              </div>
+              <div id="err-Population" class="field-error-msg"></div>
+            </div>
+
+            <!-- Latitude -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="Latitude">Latitude (°N)</label>
+                <span class="label-hint">32.0 – 42.0</span>
+              </div>
+              <div class="input-wrapper">
+                <input type="number" id="Latitude" name="Latitude" step="0.001" min="32.0" max="42.0" placeholder="e.g. 37.88" value="37.88" required>
+              </div>
+              <div id="err-Latitude" class="field-error-msg"></div>
+            </div>
+
+            <!-- Longitude -->
+            <div class="form-group">
+              <div class="label-row">
+                <label for="Longitude">Longitude (°W)</label>
+                <span class="label-hint">-125.0 – -114.0</span>
+              </div>
+              <div class="input-wrapper">
+                <input type="number" id="Longitude" name="Longitude" step="0.001" min="-125.0" max="-114.0" placeholder="e.g. -122.23" value="-122.23" required>
+              </div>
+              <div id="err-Longitude" class="field-error-msg"></div>
+            </div>
+
+          </div>
+
+          <!-- Actions -->
+          <div class="form-actions">
+            <button type="submit" id="submit-btn" class="btn-primary">
+              <span class="spinner" aria-hidden="true"></span>
+              <span id="btn-text">Predict House Price</span>
+            </button>
+            <button type="button" id="btn-reset" class="btn-secondary">Clear</button>
+          </div>
+
+        </form>
+
+        <!-- Prediction Result Display -->
+        <div id="result-section" class="result-section" aria-live="polite">
+          <div class="result-header">
+            <span class="result-title">Estimated House Price</span>
+            <span id="price-bracket" class="price-bracket-badge">Moderate</span>
+          </div>
+
+          <div id="estimated-price" class="estimated-price-display">$0</div>
+          <p id="result-explanation" class="result-explanation">Estimated value based on the property details provided.</p>
+
+          <!-- Input Breakdown for Transparency -->
+          <div class="metrics-grid">
+            <div class="metric-item">
+              <span class="metric-label">Configuration</span>
+              <span id="metric-rooms" class="metric-value">—</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Median Income</span>
+              <span id="metric-income" class="metric-value">—</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Property Age</span>
+              <span id="metric-age" class="metric-value">—</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Coordinates</span>
+              <span id="metric-coords" class="metric-value">—</span>
+            </div>
+          </div>
+
+          <div class="model-meta-bar">
+            <span id="raw-model-value">Random Forest Model (v1.0.0)</span>
+            <span>California Housing Dataset</span>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>HousePrice AI &bull; High-precision real estate estimation powered by FastAPI & Scikit-Learn.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
