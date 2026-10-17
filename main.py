@@ -85,20 +85,6 @@ class HouseFeatures(BaseModel):
 
 
 @app.get("/")
-def home():
-    return {
-        "message": "Welcome to California House Price Prediction API",
-        "status": "running",
-        "endpoints": {
-            "GET /": "API overview",
-            "GET /ui": "Interactive Web UI",
-            "GET /health": "Model health and status",
-            "GET /predict/example": "Sample valid payload to try",
-            "POST /predict": "Submit features and receive predicted house price"
-        }
-    }
-
-
 @app.get("/ui", include_in_schema=False)
 @app.get("/app", include_in_schema=False)
 def serve_ui():
@@ -106,6 +92,23 @@ def serve_ui():
     if index_file.exists():
         return FileResponse(index_file)
     raise HTTPException(status_code=404, detail="Frontend UI file not found. Ensure static/index.html exists.")
+
+
+@app.get("/api")
+def api_overview():
+    return {
+        "message": "Welcome to California House Price Prediction API",
+        "status": "running",
+        "endpoints": {
+            "GET /": "Interactive Web UI",
+            "GET /api": "API overview",
+            "GET /health": "Model health and status",
+            "GET /predict/example": "Sample valid payload to try",
+            "POST /predict": "Submit features and receive predicted house price",
+            "GET /docs": "Interactive Swagger API documentation"
+        }
+    }
+
 
 
 @app.get("/styles.css", include_in_schema=False)
